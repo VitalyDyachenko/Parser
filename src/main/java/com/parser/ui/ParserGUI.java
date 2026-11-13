@@ -1,5 +1,10 @@
 package com.parser.ui;
 
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.Theme;
+import org.fife.ui.rtextarea.RTextScrollPane;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -13,7 +18,7 @@ import java.net.URL;
 
 public class ParserGUI extends JFrame {
 
-	private JTextPane textArea;
+	private RSyntaxTextArea textArea;
 	private JTable errorTable;
 	private DefaultTableModel tableModel;
 	private JFileChooser fileChooser;
@@ -47,7 +52,22 @@ public class ParserGUI extends JFrame {
 
 	private void initUI() {
 		// Область редактирования
-		textArea = new JTextPane();
+		textArea = new RSyntaxTextArea();
+		textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
+		textArea.setCodeFoldingEnabled(true);
+		textArea.setAntiAliasingEnabled(true);
+		textArea.setTabsEmulated(true);
+		textArea.setTabSize(4);
+
+		try (InputStream in = getClass().getResourceAsStream("/org/fife/ui/rsyntaxtextarea/themes/dark.xml")) {
+			if (in != null) {
+				Theme theme = Theme.load(in);
+				theme.apply(textArea);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		textArea.getDocument().addUndoableEditListener(undoManager);
 		textArea.getDocument().addDocumentListener(new DocumentListener() {
 			public void insertUpdate(DocumentEvent e) { setModified(true); }
@@ -100,7 +120,8 @@ public class ParserGUI extends JFrame {
 			}
 		});
 
-		JScrollPane editorScroll = new JScrollPane(textArea);
+		RTextScrollPane editorScroll = new RTextScrollPane(textArea);
+		editorScroll.setLineNumbersEnabled(true);
 
 		// Область вывода результатов
 		String[] columns = {"Путь", "Строка", "Столбец", "Сообщение"};
