@@ -53,7 +53,7 @@ public class ParserGUI extends JFrame {
 	private void initUI() {
 		// Область редактирования
 		textArea = new RSyntaxTextArea();
-		textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
+		textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
 		textArea.setCodeFoldingEnabled(true);
 		textArea.setAntiAliasingEnabled(true);
 		textArea.setTabsEmulated(true);
